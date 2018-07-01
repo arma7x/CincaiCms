@@ -16,16 +16,16 @@ $blog_tree = FileLocator::getDirectoryTree(__dir__.'/../application/pages');
 //var_dump($blog_tree);
 $ordering = [
 	0 => [
-		'index'=> 1,
-		'fico' => 'fa-home',
+		'index'=> 2,
+		'ico' => 'fa-home',
 	],
 	1 => [
 		'index'=> 0,
-		'fico' => 'fa-phone',
+		'ico' => 'fa-network',
 	],
 	2 => [
-		'index'=> 2,
-		'fico' => 'fa-info-o',
+		'index'=> 1,
+		'ico' => 'fa-info-o',
 	],
 ];
 echo '###################'.PHP_EOL;

@@ -13,7 +13,7 @@ class FileLocator {
 	protected $absolute_file_path = '';
 
 	public function __construct($SERVER, $base_folder) {
-		$this->request_query = explode('/', ltrim(isset($SERVER['PATH_INFO']) ? $SERVER['PATH_INFO'] : '', '/'));
+		$this->request_query = explode('/', ltrim(isset($SERVER['PATH_INFO']) ? $SERVER['PATH_INFO'] : $SERVER['REQUEST_URI'], '/'));
 		$this->base_folder = realpath($base_folder);
 		$this->exec();
 	}

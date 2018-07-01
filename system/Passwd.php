@@ -1,0 +1,1 @@
+<?php $password = '$2y$10$q5zO74zBvMT.NGxH2zOKd.d8M.hMXX0Vq79diFSJmoTS0nXko/GTC'; ?>

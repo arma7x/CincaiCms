@@ -12,12 +12,12 @@ startTimer();
 $data = [];
 $base = realpath(__dir__.'/../application');
 $file = new FileLocator($_SERVER, $base);
+$pages_metadata = new FileMetadata(__dir__.'/../application/blogs_metadata.json');
 $content = $file->getContent();
-$metadata = new FileMetadata(__dir__.'/../application/metadata.json');
 if ($content === false) {
 	$base = realpath(__dir__.'/../application/pages');
-	if (count(explode('/', $_SERVER['PHP_SELF'])) === 2) {
-		$_SERVER['PATH_INFO'] = '/home';
+	if ($_SERVER['REQUEST_URI'] === '/') {
+		$_SERVER['REQUEST_URI'] = '/home';
 	}
 	$file = new FileLocator($_SERVER, $base);
 	$content = $file->getContent();
@@ -26,19 +26,38 @@ if ($content === false) {
 		$data['title'] = '404 - NOT FOUND';
 		$data['content'] = '<h1 class="text-center">404 - NOT FOUND</h1>';
 	} else {
-		$data['metadata'] = $metadata->seekMetadata($file->target_file);
+		$pages_metadata = new FileMetadata(__dir__.'/../application/pages_metadata.json');
+		$data['metadata'] = $pages_metadata->seekMetadata($file->target_file);
 		$data['title'] = $file->target_file;
 		$data['content'] = $content;
 	}
 } else {
-	$data['metadata'] = $metadata->seekMetadata($file->target_file);
+	$data['metadata'] = $pages_metadata->seekMetadata($file->target_file);
 	$data['title'] = $file->target_file;
 	$data['content'] = $content;
 }
-$metadata = $metadata->getMetadata();
+$metadata = $pages_metadata->getMetadata();
 $data['page_tree'] = FileLocator::getDirectoryTree(__dir__.'/../application/pages');
 $data['blog_tree'] = FileLocator::getDirectoryTree(__dir__.'/../application/blogs');
+$data['page_ordering'] = [
+		0 => [
+			'index'=> 2,
+			'ico' => 'fa-home',
+		],
+		1 => [
+			'index'=> 3,
+			'ico' => 'fa-network',
+		],
+		2 => [
+			'index'=> 0,
+			'ico' => 'fa-info-o',
+		],
+		3 => [
+			'index'=> 1,
+			'ico' => 'fa-phone',
+		],
+	];
 $data['stat_ram'] = ramUsage();
 $data['stat_timer'] = endTimer();
-require_once('/home/arma7x/Desktop/New/php/alpha/system/template.php');
+require_once('../application/template/public_template.php');
 
