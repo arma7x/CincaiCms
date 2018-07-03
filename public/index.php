@@ -39,25 +39,6 @@ if ($content === false) {
 $metadata = $pages_metadata->getMetadata();
 $data['page_tree'] = FileLocator::getDirectoryTree(__dir__.'/../application/pages');
 $data['blog_tree'] = FileLocator::getDirectoryTree(__dir__.'/../application/blogs');
-$data['page_ordering'] = [
-		0 => [
-			'index'=> 2,
-			'ico' => 'fa-home',
-		],
-		1 => [
-			'index'=> 3,
-			'ico' => 'fa-network',
-		],
-		2 => [
-			'index'=> 0,
-			'ico' => 'fa-info-o',
-		],
-		3 => [
-			'index'=> 1,
-			'ico' => 'fa-phone',
-		],
-	];
-$data['stat_ram'] = ramUsage();
-$data['stat_timer'] = endTimer();
+$data['page_ordering'] = unserialize(file_get_contents(__dir__.'/../application/pages_ordering.js'));
 require_once('../application/template/public_template.php');
 

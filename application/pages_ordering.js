@@ -1,0 +1,1 @@
+a:4:{i:0;a:2:{s:5:"index";i:2;s:3:"ico";s:7:"fa-home";}i:1;a:2:{s:5:"index";i:3;s:3:"ico";s:9:"fa-dollar";}i:2;a:2:{s:5:"index";i:1;s:3:"ico";s:10:"fa-sitemap";}i:3;a:2:{s:5:"index";i:0;s:3:"ico";s:14:"fa-info-circle";}}

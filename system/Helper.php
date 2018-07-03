@@ -37,13 +37,13 @@ function pageTreeNavigator($tree, $ordering) {
 			$temp = $tree[$value['index']];
 			if (is_string($temp)) {
 				$text = ucwords(humanReadable('-', explode('.', $temp)[0]));
-				$body .= '<li class="nav-item"><a class="nav-link" href="/'.explode('.', $temp)[0].'">'.$text.'</a></li>';
+				$body .= '<li class="nav-item"><a class="nav-link" href="/'.explode('.', $temp)[0].'"><i class="fa '.$value['ico'].'"></i> '.$text.'</a></li>';
 			} else {
 				foreach ($temp as $sub_index => $sub_value) {
 					$b_drop = '';
 					if (count($sub_value) == count($sub_value, COUNT_RECURSIVE)) {
 						$b_drop .= '<li class="nav-item dropdown">';
-						$b_drop .= '<a class="nav-link dropdown-toggle" href="#" id="'.$sub_index.'" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.ucwords(humanReadable('-', $sub_index)).'</a>';
+						$b_drop .= '<a class="nav-link dropdown-toggle" href="#" id="'.$sub_index.'" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa '.$value['ico'].'"></i> '.ucwords(humanReadable('-', $sub_index)).'</a>';
 						$b_drop .= '<div class="dropdown-menu" aria-labelledby="'.$sub_index.'">';
 						foreach($sub_value as $child_index => $child_value) {
 							$child_text = ucwords(humanReadable('-', explode('.', $child_value)[0]));

@@ -95,7 +95,7 @@ if (isset($_GET['action'])) {
 	  <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] === true): ?>
 		<?php if ($_GET['action'] === 'update-password'): ?>
 			<form id="form-update-password" class="form-signin" action="/admin/index.php?action=update-password" method="post">
-			  <h3 class="text-center">Update Password</h3>
+			  <h1 class="text-center">UPDATE PASSWORD</h1>
 			  <div class="form-label-group mb-2">
 				<label for="currentPassword">Current Password</label>
 				<input type="password" name="current_password" id="currentPassword" class="form-control" placeholder="Current Password" required>
@@ -115,7 +115,7 @@ if (isset($_GET['action'])) {
 		<?php endif; ?>
 	  <?php else: ?>
 		<form  id="form-login" class="form-signin" action="/admin/index.php?action=login" method="post">
-		  <h3 class="text-center">Login To Access Dashboard</h3>
+		  <h1 class="text-center">PLEASE LOGIN</h1>
 		  <div class="form-label-group mb-2">
 			<input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
 		  </div>
