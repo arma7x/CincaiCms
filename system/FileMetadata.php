@@ -8,6 +8,7 @@ class FileMetadata {
 	public function __construct($metadata_file) {
 		$this->metadata_file = realpath($metadata_file);
 		$this->metadata = $this->getMetadata();
+		return $this;
 	}
 
 	public function getMetadata() {
@@ -35,24 +36,3 @@ class FileMetadata {
 		return $this->metadata;
 	}
 }
-
-//$a = new FileMetadata('/home/arma7x/Desktop/New/php/alpha/application/metadata.json');
-//$old = $a->seekMetadata('an-introduction-to-php');
-//var_dump($old);
-//echo '#######################'.PHP_EOL;
-////$new['an-introduction-to-php'] = [
-	////'author' => 'arma7x',
-	////'title' => 'An Introduction To PHP', 
-	////'description' => 'Put some file description here', 
-	////'created_at' => time(),
-	////'updated_at' => time()
-////];
-//$new['an-introduction-to-php-part-2'] = [
-	//'author' => 'arma7x',
-	//'title' => 'An Introduction To PHP - Part 2', 
-	//'description' => 'Put some file description here', 
-	//'created_at' => time(),
-	//'updated_at' => time()
-//];
-//$a->saveMetadata($new);
-//var_dump($a->seekMetadata('an-introduction-to-php-part-2'));

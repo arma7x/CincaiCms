@@ -1,12 +1,10 @@
 <?php 
 	session_start();
-
+	include_once('../../../system/FileLocator.php');
+	include_once('../../../system/FileMetadata.php');
 	ini_set('xdebug.var_display_max_depth', 5);
 	ini_set('xdebug.var_display_max_children', 256);
 	ini_set('xdebug.var_display_max_data', 1024);
-
-	include_once('../../../system/FileLocator.php');
-	include_once('../../../system/FileMetadata.php');
 
 	$data = [];
 	if ($_SESSION['admin'] !== true) {
@@ -14,12 +12,13 @@
 	}
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$new_order = [];
-		var_dump($_POST);
 		foreach($_POST['index'] as $index => $value) {
 			$new_order[] = ['index'=> (int)$value, 'ico' => $_POST['icon'][$index]];
 		}
 		file_put_contents(__dir__.'/../../../application/pages_ordering.js', serialize($new_order));
+		$_SESSION['flash']['success'] = 'Successfully update page sorting';
 		header('Location: /admin/page/sort.php');
+		die;
 	}
 	$data['default_sort'] = [];
 	$page_tree = FileLocator::getDirectoryTree(__dir__.'/../../../application/pages');
@@ -105,6 +104,7 @@
 
     <!-- Begin page content -->
     <main role="main" class="container">
+      <?php require_once('../../../application/template/flash_message.php'); ?>
 	  <h1 class="mt-5 text-center">Page Sorting</h1>
 	  <small>* Sorting from left to right</small>
 	  <hr>

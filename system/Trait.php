@@ -13,6 +13,10 @@ trait Commons {
 		return (count(scandir($dir)) === 2);
 	}
 
+	public function isPropertyExists($key) {
+		return property_exists(__CLASS__, $key);
+	}
+
 	public function __get($key) {
 		if (isset($this->$key))
 			return $this->$key;

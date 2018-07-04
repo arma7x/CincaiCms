@@ -1,28 +1,38 @@
 <?php
-session_start();
-if (isset($_GET['action'])) {
-	if ($_GET['action'] === 'logout' && $_SESSION['admin'] === true) {
-		$_SESSION['admin'] = false;
-		header('Location: /admin/index.php');
-	} else if ($_GET['action'] === 'login' && $_SESSION['admin'] !== true && $_SERVER['REQUEST_METHOD'] === 'POST') {
-		require_once('../../system/Passwd.php');
-		if (isset($_POST['password'])) {
-			if (password_verify($_POST['password'], $password)) {
-				$_SESSION['admin'] = true;
+	session_start();
+	if (isset($_GET['action'])) {
+		if ($_GET['action'] === 'logout' && $_SESSION['admin'] === true) {
+			$_SESSION['admin'] = false;
+			$_SESSION['flash']['success'] = 'Successfully logout from admin panel';
+			header('Location: /admin/index.php');
+			die;
+		} else if ($_GET['action'] === 'login' && $_SESSION['admin'] !== true && $_SERVER['REQUEST_METHOD'] === 'POST') {
+			require_once('../../system/Passwd.php');
+			if (isset($_POST['password'])) {
+				if (password_verify($_POST['password'], $password)) {
+					$_SESSION['admin'] = true;
+					$_SESSION['flash']['success'] = 'Successfully login into admin panel';
+					header('Location: /admin/index.php');
+					die;
+				} else {
+					$_SESSION['flash']['danger'] = 'Fail login into admin panel';
+				}
+			}
+		} else if ($_GET['action'] === 'update-password' && $_SESSION['admin'] !== true && $_SERVER['REQUEST_METHOD'] === 'GET') {
+			header('Location: /admin/index.php');
+		} else if ($_GET['action'] === 'update-password' && $_SESSION['admin'] === true && $_SERVER['REQUEST_METHOD'] === 'POST') {
+			require_once('../../system/Passwd.php');
+			if (password_verify($_POST['current_password'], $password) && ($_POST['confirm_password'] === $_POST['new_password'])) {
+				$hash = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
+				file_put_contents('../../system/Passwd.php', '<?php $password = \''.$hash.'\'; ?>');
+				$_SESSION['flash']['success'] = 'Successfully update current password';
 				header('Location: /admin/index.php');
+				die;
+			} else {
+				$_SESSION['flash']['danger'] = 'Incorrect current password';
 			}
 		}
-	} else if ($_GET['action'] === 'update-password' && $_SESSION['admin'] !== true && $_SERVER['REQUEST_METHOD'] === 'GET') {
-		header('Location: /admin/index.php');
-	} else if ($_GET['action'] === 'update-password' && $_SESSION['admin'] === true && $_SERVER['REQUEST_METHOD'] === 'POST') {
-		require_once('../../system/Passwd.php');
-		if (password_verify($_POST['current_password'], $password) && ($_POST['confirm_password'] === $_POST['new_password'])) {
-			$hash = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
-			file_put_contents('../../system/Passwd.php', '<?php $password = \''.$hash.'\'; ?>');
-			header('Location: /admin/index.php');
-		}
 	}
-}
 
 ?>
 <!doctype html>
@@ -90,6 +100,7 @@ if (isset($_GET['action'])) {
 
     <!-- Begin page content -->
     <main role="main" class="container">
+    <?php require_once('../../application/template/flash_message.php'); ?>
     <div class="row justify-content-sm-center align-items-center" style="height:80vh;">
       <div class="col-sm-4 align-items-center">
 	  <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] === true): ?>

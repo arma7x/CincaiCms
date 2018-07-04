@@ -1,7 +1,17 @@
 <?php 
 	session_start(); 
+	include_once('../../../system/FileMetadata.php');
+	ini_set('xdebug.var_display_max_depth', 5);
+	ini_set('xdebug.var_display_max_children', 256);
+	ini_set('xdebug.var_display_max_data', 1024);
+
 	if ($_SESSION['admin'] !== true) {
+		$_SESSION['flash']['warning'] = 'Forbidden Access';
 		header('Location: /admin/index.php');
+		die;
+	}
+	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+		$pages_metadata = new FileMetadata(__dir__.'/../../../application/pages_metadata.json');
 	}
 ?>
 <!doctype html>
@@ -69,7 +79,9 @@
 
     <!-- Begin page content -->
     <main role="main" class="container">
+      <?php require_once('../../../application/template/flash_message.php'); ?>
       <h1 class="mt-5">Pages</h1>
+      <?php var_dump($pages_metadata->getMetadata()) ?>
     </main>
 
     <footer class="footer">

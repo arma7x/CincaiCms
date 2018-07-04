@@ -1,7 +1,38 @@
 <?php 
-session_start(); 
+
+	session_start();
+	include_once('../../../system/FileMetadata.php');
+	include_once('../../../system/FileEditor.php');
+
 	if ($_SESSION['admin'] !== true) {
+		$_SESSION['flash']['warning'] = 'Forbidden Access';
 		header('Location: /admin/index.php');
+		die;
+	}
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		$pages_metadata = new FileMetadata(__dir__.'/../../../application/pages_metadata.json');
+		$metadata_index = str_replace(' ', '-', preg_replace("/[^[:alnum:][:space:]]/u", '', $_POST['title']));
+		if(count($pages_metadata->seekMetadata($metadata_index)) != 0) {
+			$_SESSION['flash']['warning'] = 'Title is already exist';
+		} else {
+			$file = [
+				'author' => $_POST['author'] ? 'test' : 'author here',
+				'title' => $_POST['title'], 
+				'description' => $_POST['description'] ? 'test' : 'description here', 
+				'save_path' => strtolower($_POST['save_path']), 
+				'created_at' => time(),
+				'updated_at' => time(),
+				'content' => $_POST['content'] ? 'test' : 'test',
+				'metadata_index' => $metadata_index
+			];
+			$editor = new FileEditor($file, $pages_metadata);
+			$editor->storeFile(__dir__.'/../../../application/pages');
+			$_SESSION['flash']['success'] = 'Successfully add new page';
+			header('Location: /admin/page');
+			die;
+		}
+	} else {
+		
 	}
 ?>
 <!doctype html>
@@ -69,7 +100,18 @@ session_start();
 
     <!-- Begin page content -->
     <main role="main" class="container">
+      <?php require_once('../../../application/template/flash_message.php'); ?>
       <h1 class="mt-5">Page Add</h1>
+		<form id="form-login" class="form-signin" action="/admin/page/add.php" method="post">
+		  <h1 class="text-center">PLEASE LOGIN</h1>
+		  <div class="form-label-group mb-2">
+			<input type="text" name="title" id="title" class="form-control" placeholder="Please enter title" required>
+		  </div>
+		  <div class="form-label-group mb-2">
+			<input type="text" name="save_path" id="save_path" class="form-control" placeholder="Please save path">
+		  </div>
+		  <button id="login" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		</form>
     </main>
 
     <footer class="footer">
