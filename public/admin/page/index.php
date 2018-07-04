@@ -1,6 +1,7 @@
 <?php 
 	session_start(); 
 	include_once('../../../system/FileMetadata.php');
+	include_once('../../../system/FileEditor.php');
 	ini_set('xdebug.var_display_max_depth', 5);
 	ini_set('xdebug.var_display_max_children', 256);
 	ini_set('xdebug.var_display_max_data', 1024);
@@ -12,6 +13,21 @@
 	}
 	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 		$pages_metadata = new FileMetadata(__dir__.'/../../../application/pages_metadata.json');
+		if (isset($_GET['delete'])) {
+			$file = $pages_metadata->seekMetadata($_GET['delete']);
+			if(count($file) === 0) {
+				$_SESSION['flash']['warning'] = 'File `'.$_GET['delete'].'` does not exist';
+				header('Location: /admin/page');
+				die;
+			} else {
+				$file['metadata_index'] = $_GET['delete'];
+				$editor = new FileEditor($file, $pages_metadata);
+				$editor->removeFile(__dir__.'/../../../application/pages');
+				$_SESSION['flash']['success'] = 'Successfully remove page `'.$_GET['delete'].'`';
+				header('Location: /admin/page');
+				die;
+			}
+		}
 	}
 ?>
 <!doctype html>
@@ -80,8 +96,34 @@
     <!-- Begin page content -->
     <main role="main" class="container">
       <?php require_once('../../../application/template/flash_message.php'); ?>
-      <h1 class="mt-5">Pages</h1>
-      <?php var_dump($pages_metadata->getMetadata()) ?>
+      <h1 class="text-center mt-5">Page List</h1>
+	  <div class="table-responsive">
+      <table class="table">
+		  <tr>
+			<th class="table-dark">Title</th>
+			<th class="table-dark">Author</th>
+			<th class="table-dark">Description</th>
+			<th class="table-dark">Save Path</th>
+			<th class="table-dark">Created At</th>
+			<th class="table-dark">Updated At</th>
+			<th class="table-dark">Action</th>
+		  </tr>
+		  <?php foreach($pages_metadata->getMetadata() as $index => $meta): ?>
+			<tr>
+				<td><?php echo $meta['title'] ?></td>
+				<td><?php echo $meta['author'] ?></td>
+				<td><?php echo $meta['description'] ?></td>
+				<td><?php echo $meta['save_path'] ?></td>
+				<td><?php echo date("jS F, Y, H:i:s P", $meta['created_at']) ?></td>
+				<td><?php echo date("jS F, Y, H:i:s P", $meta['updated_at']) ?></td>
+				<td>
+					<button class="btn btn-sm btn-danger" onclick="deletePage('<?php echo $index ?>')">Delete</button>
+					<button class="btn btn-sm btn-warning text-white" onclick="editPage('<?php echo $index ?>')">Edit</button>
+				</td>
+			</tr>
+		  <?php endforeach ?>
+	  </table>
+	  </div>
     </main>
 
     <footer class="footer">
@@ -101,5 +143,19 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script>
+		function deletePage(index) {
+			var res = confirm('Are you sure to remove page `'+index+'` ?')
+			if (res) {
+				window.location.href = '/admin/page?delete='+index;
+			}
+		}
+		function editPage(index) {
+			var res = confirm('Are you sure to edit page `'+index+'` ?')
+			if (res) {
+				window.location.href = '/admin/page/edit.php?index='+index;
+			}
+		}
+	</script>
   </body>
 </html>

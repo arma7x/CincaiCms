@@ -32,6 +32,7 @@ class FileMetadata {
 
 	public function removeMetadata($index) {
 		unset($this->metadata[$index]);
+		file_put_contents(realpath($this->metadata_file),json_encode($this->metadata));
 		$this->metadata = $this->getMetadata();
 		return $this->metadata;
 	}

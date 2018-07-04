@@ -11,18 +11,18 @@
 	}
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$pages_metadata = new FileMetadata(__dir__.'/../../../application/pages_metadata.json');
-		$metadata_index = str_replace(' ', '-', preg_replace("/[^[:alnum:][:space:]]/u", '', $_POST['title']));
+		$metadata_index = strtolower(str_replace(' ', '-', preg_replace("/[^[:alnum:][:space:]]/u", '', $_POST['title'])));
 		if(count($pages_metadata->seekMetadata($metadata_index)) != 0) {
 			$_SESSION['flash']['warning'] = 'Title is already exist';
 		} else {
 			$file = [
-				'author' => $_POST['author'] ? 'test' : 'author here',
+				'author' => $_POST['author'],
 				'title' => $_POST['title'], 
-				'description' => $_POST['description'] ? 'test' : 'description here', 
+				'description' => $_POST['description'], 
 				'save_path' => strtolower($_POST['save_path']), 
 				'created_at' => time(),
 				'updated_at' => time(),
-				'content' => $_POST['content'] ? 'test' : 'test',
+				'content' => $_POST['content'],
 				'metadata_index' => $metadata_index
 			];
 			$editor = new FileEditor($file, $pages_metadata);
@@ -50,6 +50,13 @@
 		<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
 	-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.10.0/ui/trumbowyg.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.10.0/plugins/colors/ui/trumbowyg.colors.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.10.0/plugins/emoji/ui/trumbowyg.emoji.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.10.0/plugins/highlight/ui/trumbowyg.highlight.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.10.0/plugins/mathml/ui/trumbowyg.mathml.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.10.0/plugins/mention/ui/trumbowyg.mention.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.10.0/plugins/table/ui/trumbowyg.table.min.css">
 	<style>
 		/* Sticky footer styles
 		-------------------------------------------------- */
@@ -101,16 +108,24 @@
     <!-- Begin page content -->
     <main role="main" class="container">
       <?php require_once('../../../application/template/flash_message.php'); ?>
-      <h1 class="mt-5">Page Add</h1>
-		<form id="form-login" class="form-signin" action="/admin/page/add.php" method="post">
-		  <h1 class="text-center">PLEASE LOGIN</h1>
+		<h1 class="text-center mt-5">Add Page</h1>
+		<form id="form-login" class="add-page" action="/admin/page/add.php" method="post">
 		  <div class="form-label-group mb-2">
 			<input type="text" name="title" id="title" class="form-control" placeholder="Please enter title" required>
 		  </div>
 		  <div class="form-label-group mb-2">
-			<input type="text" name="save_path" id="save_path" class="form-control" placeholder="Please save path">
+			<input type="text" name="author" id="author" class="form-control" placeholder="Please enter author" required>
 		  </div>
-		  <button id="login" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		  <div class="form-label-group mb-2">
+			<input type="text" name="description" id="description" class="form-control" placeholder="Please enter description" required>
+		  </div>
+		  <div class="form-label-group mb-2">
+			<input type="text" name="save_path" id="save_path" class="form-control" placeholder="Please enter save path">
+		  </div>
+		  <div class="form-label-group mb-2">
+			<textarea type="text" name="content" id="html-editor" class="form-control" placeholder="Please enter content"  required></textarea>
+		  </div>
+		  <button id="login" class="btn btn-primary btn-sm" type="submit">Save Page</button>
 		</form>
     </main>
 
@@ -128,8 +143,17 @@
 		<script src="/assets/js/popper.min.js"></script>
 		<script src="/assets/js/bootstrap.min.js"></script>
 	-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.10.0/trumbowyg.min.js"></script>
+	<script>
+		$.trumbowyg.svgPath = '/icons.svg';
+		$('#html-editor').trumbowyg({
+			autogrow: true,
+			removeformatPasted: false,
+			resetCss: false,
+		});
+	</script>
   </body>
 </html>

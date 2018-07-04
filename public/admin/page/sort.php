@@ -16,7 +16,7 @@
 			$new_order[] = ['index'=> (int)$value, 'ico' => $_POST['icon'][$index]];
 		}
 		file_put_contents(__dir__.'/../../../application/pages_ordering.js', serialize($new_order));
-		$_SESSION['flash']['success'] = 'Successfully update page sorting';
+		$_SESSION['flash']['success'] = 'Successfully update Sort Page';
 		header('Location: /admin/page/sort.php');
 		die;
 	}
@@ -46,7 +46,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Panel - Page Sorting</title>
+    <title>Admin Panel - Sort Page</title>
 
     <!-- Bootstrap core CSS -->
 	<!--
@@ -105,7 +105,7 @@
     <!-- Begin page content -->
     <main role="main" class="container">
       <?php require_once('../../../application/template/flash_message.php'); ?>
-	  <h1 class="mt-5 text-center">Page Sorting</h1>
+	  <h1 class="mt-5 text-center">Sort Page</h1>
 	  <small>* Sorting from left to right</small>
 	  <hr>
 	  <form id="form-page-sorting" action="/admin/page/sort.php" method="post">

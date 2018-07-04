@@ -101,7 +101,7 @@
     <!-- Begin page content -->
     <main role="main" class="container">
     <?php require_once('../../application/template/flash_message.php'); ?>
-    <div class="row justify-content-sm-center align-items-center" style="height:80vh;">
+    <div class="row justify-content-sm-center align-items-center" style="height:70vh;">
       <div class="col-sm-4 align-items-center">
 	  <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] === true): ?>
 		<?php if ($_GET['action'] === 'update-password'): ?>

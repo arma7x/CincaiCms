@@ -26,6 +26,7 @@ class FileEditor {
 	}
 
 	public function storeFile($folder) {
+		$save_path = '';
 		if ($this->save_path !== '') {
 			$save_path = DIRECTORY_SEPARATOR.$this->save_path;
 			$folders = explode(' ', $this->save_path);
@@ -47,40 +48,33 @@ class FileEditor {
 		}
 		$success = file_put_contents(realpath($folder).$save_path.DIRECTORY_SEPARATOR.$this->metadata_index.'.html', $this->content);
 		if ($success) {
-			$this->saveMetadata();
+			chmod(realpath($folder).$save_path.DIRECTORY_SEPARATOR.$this->metadata_index.'.html', 0777);
+			$data[$this->metadata_index] = [
+				'author' => $this->author,
+				'title' => $this->title,
+				'description' => $this->description,
+				'save_path' => $this->save_path,
+				'created_at' => $this->created_at,
+				'updated_at' => $this->updated_at
+			];
+			$this->metadata->saveMetadata($data);
 		}
 	}
 
 	public function removeFile($folder) {
-		
-	}
-
-	private function saveMetadata() {
-		$data[$this->metadata_index] = [
-			'author' => $this->author,
-			'title' => $this->title,
-			'description' => $this->description,
-			'save_path' => $this->save_path,
-			'created_at' => $this->created_at,
-			'updated_at' => $this->updated_at
-		];
-		$this->metadata->saveMetadata($data);
+		$save_path = '';
+		if ($this->save_path !== '') {
+			$save_path = DIRECTORY_SEPARATOR.$this->save_path;
+			$folders = explode(' ', $this->save_path);
+			if (count($folders) > 1) {
+				$save_path = '';
+				foreach($folders as $index => $name) {
+					$save_path .= DIRECTORY_SEPARATOR.$name;
+				}
+			}
+		}
+		unlink(realpath($folder).$save_path.DIRECTORY_SEPARATOR.$this->metadata_index.'.html');
+		$this->metadata->removeMetadata($this->metadata_index);
 	}
 
 }
-
-
-//$metadata = new FileMetadata(__dir__.'/../application/blogs_metadata.json');
-
-//$file = [
-	//'author' => 'arma7x',
-	//'title' => 'An Introduction To PHP', 
-	//'description' => 'Put some file description here', 
-	//'save_path' => 'an-introduction-to-php.html', 
-	//'created_at' => time(),
-	//'updated_at' => time(),
-	//'content' => 'content should be here',
-	//'metadata_index' => 'an-introduction-to-php'
-//];
-//$a = new FileEditor($file, $metadata);
-//var_dump($a->metadata->seekMetadata('an-introduction-to-php'));

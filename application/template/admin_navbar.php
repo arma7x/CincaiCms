@@ -28,9 +28,17 @@
                 </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/admin/index.php?action=logout">Logout</a>
+                <a class="nav-link" href="#" onClick="logout()">Logout</a>
               </li>
             <?php endif; ?>
           </ul>
         </div>
       </nav>
+      <script>
+		function logout() {
+			var res = confirm('Are you sure to logout ?')
+			if (res) {
+				window.location.href = '/admin/index.php?action=logout';
+			}
+		}
+	  </script>
