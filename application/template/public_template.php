@@ -73,10 +73,10 @@
 	<!-- Body is here -->
 	<main role="main" class="container">
 		<div class="row">
-			<div class="col-md-8 col-lg-9">
+			<div class="<?php echo (count($data['blog_tree']) > 0) ? 'col-md-8 col-lg-9': 'col-md-12 col-lg-12' ?>">
 				<?php if (isset($file->request_query[0]) && $file->request_query[0] === 'blogs'): ?>
-					<h3><?php echo isset($data['metadata']['title']) ? $data['metadata']['title'] : ucwords(humanReadable('-', $data['title'])) ?></h3>
 					<?php if (count($data['metadata']) > 0): ?>
+						<h3><?php echo isset($data['metadata']['title']) ? $data['metadata']['title'] : ucwords(humanReadable('-', $data['title'])) ?></h3>
 						<small>
 							<b>Author: <?php echo isset($data['metadata']['author']) ? $data['metadata']['author'] : 'Admin' ?></b>
 							<b>/ Published: <?php echo date("jS F, Y, H:i:s P", $data['metadata']['created_at']) ?></b>
@@ -88,10 +88,12 @@
 				<?php endif ?>
 				<?php echo $data['content']; ?>
 			</div>
+			<?php if (count($data['blog_tree']) > 0): ?>
 			<div class="col-md-4 col-lg-3" id="sidebar">
 				<h3>Blog Posts</h3>
 				<?php echo blogTreeNavigator('/blogs', $data['blog_tree'], '', $metadata); ?>
 			</div>
+			<?php endif; ?>
 		</div>
 	</main>
 	<!-- Footer is here -->

@@ -14,7 +14,7 @@ class FileMetadata {
 	public function getMetadata() {
 		$raw = file_get_contents(realpath($this->metadata_file), FILE_USE_INCLUDE_PATH);
 		$this->metadata = json_decode($raw, true);
-		return $this->metadata;
+		return $this->metadata ? $this->metadata : [];
 	}
 
 	public function seekMetadata($index) {

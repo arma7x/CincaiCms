@@ -6,7 +6,7 @@ trait Commons {
 		return is_dir($path);
 	}
 
-	public function is_dir_empty($dir) {
+	static public function is_dir_empty($dir) {
 		$dir = realpath($dir);
 		if (!is_readable($dir)) 
 			return true; 

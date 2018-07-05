@@ -9,13 +9,19 @@
               <a class="nav-link" href="/">Return Home</a>
             </li>
             <?php if(isset($_SESSION['admin']) && $_SESSION['admin'] === true): ?>
+				<li class="nav-item">
+				  <a class="nav-link" target="_blank" href="/admin/info.php">PHP Info</a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" target="_blank" href="/admin/opcache.php">Opcache Status</a>
+				</li>
               <li class="nav-item">
                 <a class="nav-link" href="/admin/index.php?action=update-password">Update Password</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="blogs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Blogs</a>
                 <div class="dropdown-menu" aria-labelledby="blogs">
-                  <a class="dropdown-item" href="/admin/blog">Blog Post List</a>
+                  <a class="dropdown-item" href="/admin/blog">Blog Posts</a>
                   <a class="dropdown-item" href="/admin/blog/add.php">Add Blog Post</a>
                 </div>
               </li>

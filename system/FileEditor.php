@@ -25,6 +25,11 @@ class FileEditor {
 		}
 	}
 
+	public function getContent($folder) {
+		$this->content = file_get_contents(realpath($folder).FileEditor::FolderFriendlyToSystem($this->save_path).DIRECTORY_SEPARATOR.$this->metadata_index.'.html');
+		return $this;
+	}
+
 	public function storeFile($folder) {
 		$save_path = '';
 		if ($this->save_path !== '') {
@@ -58,6 +63,13 @@ class FileEditor {
 				'updated_at' => $this->updated_at
 			];
 			$this->metadata->saveMetadata($data);
+			if (count($this->metadata->seekMetadata($this->metadata_index)) > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
 		}
 	}
 
@@ -75,6 +87,49 @@ class FileEditor {
 		}
 		unlink(realpath($folder).$save_path.DIRECTORY_SEPARATOR.$this->metadata_index.'.html');
 		$this->metadata->removeMetadata($this->metadata_index);
+		if (count($this->metadata->seekMetadata($this->metadata_index)) === 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function editFile() {
+		
+	}
+
+	static public function TitleFriendly($string) {
+		return strtolower(str_replace(' ', '-', preg_replace("/[^[:alnum:][:space:]]/u", '', trim($string))));
+	}
+
+	static public function FolderFriendly($string) {
+		return strtolower(preg_replace("/[^[:alnum:][:space:][-]/u", '', trim($string)));
+	}
+
+	static public function FolderFriendlyToURL($string) {
+		$trimed = str_replace(' ', '/', $string);
+		return ($trimed !== '') ? '/'.$trimed : $trimed;
+	}
+
+	static public function FolderFriendlyToSystem($string) {
+		$trimed = str_replace(' ', DIRECTORY_SEPARATOR, $string);
+		return ($trimed !== '') ? DIRECTORY_SEPARATOR.$trimed : $trimed;
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
