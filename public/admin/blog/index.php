@@ -80,7 +80,7 @@
 					<td><?php echo date("jS F, Y, H:i:s P", $meta['created_at']) ?></td>
 					<td><?php echo date("jS F, Y, H:i:s P", $meta['updated_at']) ?></td>
 					<td>
-						<button class="mb-1 btn btn-sm btn-info text-white" onclick="viewblog('/blog<?php echo FileEditor::FolderFriendlyToURL($meta['save_path']).'/'.$index; ?>')">View</button><br/>
+						<button class="mb-1 btn btn-sm btn-info text-white" onclick="viewblog('/blogs<?php echo FileEditor::FolderFriendlyToURL($meta['save_path']).'/'.$index; ?>')">View</button><br/>
 						<button class="mb-1 btn btn-sm btn-warning text-white" onclick="editblog('<?php echo $index ?>')">Edit</button><br/>
 						<button class="btn btn-sm btn-danger" onclick="deleteblog('<?php echo $index ?>')">Delete</button>
 					</td>

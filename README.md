@@ -4,5 +4,7 @@
 4) Open 127.0.0.1:9000 in browser
 
 *** Demo https://cincaicms.herokuapp.com
-*** Admin panel password: 'admin'
+
+*** Admin panel password: admin
+
 *** Test on PHP Version 5.6.36
