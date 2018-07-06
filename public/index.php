@@ -1,8 +1,6 @@
 <?php
-	ini_set('xdebug.var_display_max_depth', 5);
-	ini_set('xdebug.var_display_max_children', 256);
-	ini_set('xdebug.var_display_max_data', 1024);
 
+	include_once('../system/DevScript.php');
 	include_once('../system/FileLocator.php');
 	include_once('../system/FileMetadata.php');
 	include_once('../system/Helper.php');
