@@ -68,6 +68,9 @@
 		<!-- Begin page content -->
 		<main role="main" class="container">
 			<h1 class="text-center mt-5">Edit Page[<?php echo $editor->title; ?>]</h1>
+			<small>* Please use alphanumeric character and dash only</small><br>
+			<small>* Save path convert space between word as subfolder, etc <strong>`folder`</strong> -> <strong>folder</strong> / <strong>`folder subfolder`</strong> -> <strong>folder<?php echo DIRECTORY_SEPARATOR ?>subfolder</strong></small><br>
+			<small>* Page allow single folder save path only, etc <strong>`folder`</strong> -> <strong>OK</strong> / <strong>`folder subfolder`</strong> -> <strong>BAD</strong></small>
 			<hr>
 			<form id="form-login" class="add-page" action="/admin/page/edit.php?index=<?php echo $_GET['index'] ?>" method="post">
 				<div class="form-label-group mb-2">

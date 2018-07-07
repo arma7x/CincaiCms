@@ -11,63 +11,26 @@
 	<!-- Bootstrap core CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	
-	<style>
-		/* Sticky footer styles
-		-------------------------------------------------- */
-		html {
-		  position: relative;
-		  min-height: 100%;
-		}
-		body {
-		  /* Margin bottom by footer height */
-		  margin-bottom: 60px;
-		}
-		.footer {
-		  position: absolute;
-		  bottom: 0;
-		  width: 100%;
-		  /* Set the fixed height of the footer here */
-		  height: 60px;
-		  line-height: 60px; /* Vertically center the text there */
-		  background-color: #f5f5f5;
-		}
+	<link rel="stylesheet" href="/theme.css">
 
-
-		/* Custom page CSS
-		-------------------------------------------------- */
-		/* Not required for template or sticky footer method. */
-
-		body > .container {
-		  padding: 60px 15px 0;
-		}
-
-		.footer > .container {
-		  padding-right: 15px;
-		  padding-left: 15px;
-		}
-
-		code {
-		  font-size: 80%;
-		}
-	</style>
-  </head>
-  <body>
-    <header>
-      <!-- Fixed navbar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-		  <a class="navbar-brand" href="/">CinCaiCMS</a>
-		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		  </button>
-
-		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<?php echo pageTreeNavigator($data['page_tree'], $data['page_ordering']); ?>
-			<form class="form-inline my-2 my-lg-0">
-			  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-			  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</form>
-		  </div>
+	</head>
+	<body>
+		<header>
+		<!-- Fixed navbar -->
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="/">CinCaiCMS</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<?php if (count($data['blog_tree']) > 0): ?>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<?php echo pageTreeNavigator($data['page_tree'], $data['page_ordering']); ?>
+				<form class="form-inline my-2 my-lg-0">
+					<input id="search_keyword" class="form-control mr-sm-2" type="search" placeholder="Search blog posts" aria-label="Search">
+					<div id="search_result" class="bg-info text-white" style="position:absolute;top:0;margin-top:3.5em;z-index:999999;border-radius:2px;"></div>
+				</form>
+			</div>
+			<?php endif ?>
 		</nav>
 	</header>
 	<!-- Body is here -->
@@ -91,18 +54,18 @@
 			<?php if (count($data['blog_tree']) > 0): ?>
 			<div class="col-md-4 col-lg-3" id="sidebar">
 				<h3>Blog Posts</h3>
-				<?php echo blogTreeNavigator('/blogs', $data['blog_tree'], '', $metadata); ?>
+				<?php echo blogTreeNavigator('/blogs', $data['blog_tree'], '', $data['blogs_metadata']); ?>
 			</div>
 			<?php endif; ?>
 		</div>
 	</main>
 	<!-- Footer is here -->
 	<footer class="footer">
-      <div class="container-fluid">
+		<div class="container-fluid">
 		<?php  $data['stat_ram'] = ramUsage(); $data['stat_timer'] = endTimer(); ?>
-        <span class="text-muted"><?php echo $data['stat_timer']; ?>Second/<?php echo $data['stat_ram']; ?>MB <a href="/admin">Admin Panel</a></span>
-      </div>
-    </footer>
+		<span class="text-muted"><?php echo $data['stat_timer']; ?>Second/<?php echo $data['stat_ram']; ?>MB <a href="/admin">Admin Panel</a></span>
+		</div>
+	</footer>
    
 	<!-- Bootstrap core JavaScript
 	================================================== -->
@@ -110,7 +73,50 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script>
+		var blogs_metadata = <?php echo json_encode($data['blogs_metadata']) ?>
 
+		function searching(word) {
+			var prependBody = ''
+			$('#search_result').empty();
+			for (key in blogs_metadata) {
+				if (blogs_metadata[key]['title'].toLowerCase().search(word.toLowerCase()) != -1) {
+					if (blogs_metadata[key]['save_path'] == '') {
+						prependBody += '<div><small><a class="m-1 text-white" href="/blogs/'+key+'">'+blogs_metadata[key]['title']+'</a></small></div>'
+					} else {
+						var folders = blogs_metadata[key]['save_path'].split(' ')
+						if (folders.length > 1) {
+							prependBody += '<div><small><a class="m-1 text-white" href="/blogs/'+folders.join('/')+'/'+key+'">'+blogs_metadata[key]['title']+'</a></small></div>'
+						} else {
+							prependBody += '<div><small><a class="m-1 text-white" href="/blogs/'+blogs_metadata[key]['save_path']+'/'+key+'">'+blogs_metadata[key]['title']+'</a></small></div>'
+						}
+					}
+				}
+			}
+			if (prependBody != '') {
+				$('#search_result').prepend(prependBody);
+			}
+		}
+
+		$(document).ready(function() {
+			var wait
+			$('#search_keyword').on('keyup', function() {
+				if (wait) {
+					clearTimeout(wait)
+				}
+				wait = setTimeout(function () {
+					if ($('#search_keyword').val() != 'undefined' && $('#search_keyword').val() != '') {
+						(function(word, cb) {
+							cb(word)
+						})($('#search_keyword').val(), searching)
+					} else if ($('#search_keyword').val() == '') {
+						$('#search_result').empty();
+					}
+				}, 600)
+			});
+		})
+		
+	</script>
   </body>
 </html>
 

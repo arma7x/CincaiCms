@@ -46,7 +46,7 @@ class FileLocator {
 
 	private function exec() {
 		$this->resolvePath();
-		if ($this->isPathExist(realpath($this->base_folder.$this->target_folder))) {
+		if (is_dir(realpath($this->base_folder.$this->target_folder))) {
 			$this->getPathToFile();
 		}
 	}

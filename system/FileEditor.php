@@ -39,13 +39,13 @@ class FileEditor {
 				$save_path = '';
 				foreach($folders as $index => $name) {
 					$save_path .= DIRECTORY_SEPARATOR.$name;
-					if($this->isPathExist(realpath($folder).$save_path) === false) {
+					if(is_dir(realpath($folder).$save_path) === false) {
 						mkdir(realpath($folder).$save_path, 0777, true);
 						chmod(realpath($folder).$save_path, 0777);
 					}
 				}
 			} else {
-				if($this->isPathExist(realpath($folder).$save_path) === false) {
+				if(is_dir(realpath($folder).$save_path) === false) {
 					mkdir(realpath($folder).$save_path, 0777, true);
 					chmod(realpath($folder).$save_path, 0777);
 				}

@@ -66,6 +66,8 @@
 		<main role="main" class="container">
 			<?php require_once('../../../application/template/flash_message.php'); ?>
 			<h1 class="text-center mt-5">Add Blog Post</h1>
+			<small>* Please use alphanumeric character and dash only</small><br>
+			<small>* Save path convert space between word as subfolder, etc <strong>`folder`</strong> -> <strong>folder</strong> / <strong>`folder subfolder`</strong> -> <strong>folder<?php echo DIRECTORY_SEPARATOR ?>subfolder</strong></small><br>
 			<hr>
 			<form id="form-login" class="add-blog" action="/admin/blog/add.php" method="post">
 				<div class="form-label-group mb-2">
