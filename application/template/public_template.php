@@ -25,14 +25,18 @@
 			<?php if (count($data['blog_tree']) > 0): ?>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<?php echo pageTreeNavigator($data['page_tree'], $data['page_ordering']); ?>
-				<form class="form-inline my-2 my-lg-0">
+				<form id="search-form" class="form-inline my-2 my-lg-0" autocomplete="off">
 					<input id="search_keyword" class="form-control mr-sm-2" type="search" placeholder="Search blog posts" aria-label="Search">
-					<div id="search_result" class="bg-info text-white" style="position:absolute;top:0;margin-top:3.5em;z-index:999999;border-radius:2px;"></div>
 				</form>
 			</div>
 			<?php endif ?>
 		</nav>
 	</header>
+	<?php if (count($data['blog_tree']) > 0): ?>
+	<div class="row">
+		<div id="search_result" class="bg-info text-white position-absolute search-result"></div>
+	</div>
+	<?php endif ?>
 	<!-- Body is here -->
 	<main role="main" class="container">
 		<div class="row">
@@ -82,19 +86,19 @@
 			for (key in blogs_metadata) {
 				if (blogs_metadata[key]['title'].toLowerCase().search(word.toLowerCase()) != -1) {
 					if (blogs_metadata[key]['save_path'] == '') {
-						prependBody += '<div><small><a class="m-1 text-white" href="/blogs/'+key+'">'+blogs_metadata[key]['title']+'</a></small></div>'
+						prependBody += '<li><a class="m-1 text-white" href="/blogs/'+key+'">'+blogs_metadata[key]['title']+'</a></li>'
 					} else {
 						var folders = blogs_metadata[key]['save_path'].split(' ')
 						if (folders.length > 1) {
-							prependBody += '<div><small><a class="m-1 text-white" href="/blogs/'+folders.join('/')+'/'+key+'">'+blogs_metadata[key]['title']+'</a></small></div>'
+							prependBody += '<li><a class="m-1 text-white" href="/blogs/'+folders.join('/')+'/'+key+'">'+blogs_metadata[key]['title']+'</a></li>'
 						} else {
-							prependBody += '<div><small><a class="m-1 text-white" href="/blogs/'+blogs_metadata[key]['save_path']+'/'+key+'">'+blogs_metadata[key]['title']+'</a></small></div>'
+							prependBody += '<li><a class="m-1 text-white" href="/blogs/'+blogs_metadata[key]['save_path']+'/'+key+'">'+blogs_metadata[key]['title']+'</a></li>'
 						}
 					}
 				}
 			}
 			if (prependBody != '') {
-				$('#search_result').prepend(prependBody);
+				$('#search_result').prepend('<ol class="pt-3">'+prependBody+'</ol>');
 			}
 		}
 
@@ -114,6 +118,21 @@
 					}
 				}, 600)
 			});
+			$('#search_keyword').on('focus', function() {
+				if ($('#search_keyword').val() != 'undefined' && $('#search_keyword').val() != '') {
+					(function(word, cb) {
+						cb(word)
+					})($('#search_keyword').val(), searching)
+				}
+			});
+			$('#search_keyword').on('focusout', function() {
+				setTimeout(function() {
+					$('#search_result').empty();
+				}, 600)
+			});
+			$('#search-form').submit(function(e) {
+				e.preventDefault();
+			})
 		})
 		
 	</script>

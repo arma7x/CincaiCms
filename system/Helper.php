@@ -24,8 +24,6 @@ function pageTreeNavigator($tree, $ordering) {
 	$open = '<ul class="navbar-nav mr-auto">';
 	$body = '';
 	$close = '</ul>';
-	//var_dump($tree);
-	//die;
 	if (is_array($ordering) && (count($ordering) === count($tree))) {
 		foreach($ordering as $index => $value) {
 			if (isset($tree[$value['index']])) {
@@ -97,14 +95,14 @@ function blogTreeNavigator($base, $tree, $style, $metadata) {
 			foreach ($value as $sub_index => $sub_value) {
 				if (count($sub_value) == count($sub_value, COUNT_RECURSIVE)) {
 					$rand = explode('.', (microtime(true)))[1];
-					$body .= '<li>&#x21b3; <a data-toggle="collapse" href="#'.$rand.'" role="button" aria-expanded="true" aria-controls="'.$rand.'">'.ucwords(humanReadable('-', $sub_index)).'<ul class="collapse" id="'.$rand.'">';
+					$body .= '<li><a data-toggle="collapse" href="#'.$rand.'" role="button" aria-expanded="true" aria-controls="'.$rand.'">&#x21b3 '.ucwords(humanReadable('-', $sub_index)).'<ul class="collapse" id="'.$rand.'">';
 					foreach ($sub_value as $child_index => $child_value) {
 						$body .= '<li><a href="'.$base.'/'.$sub_index.'/'.explode('.', $child_value)[0].'">'.ucwords(humanReadable('-', explode('.', $child_value)[0])).'</a></li>';
 					}
 					$body .= '</ul></a></li>';
 				} else {
 					$rand = explode('.', (microtime(true)))[1];
-					$body .= '<li>&#x21b3; <a data-toggle="collapse" href="#'.$rand.'" role="button" aria-expanded="true" aria-controls="'.$rand.'">'.ucwords(humanReadable('-', $sub_index)).blogTreeNavigator($base.'/'.$sub_index, $sub_value, 'class="collapse" id="'.$rand.'"', $metadata).'</a></li>';
+					$body .= '<li><a data-toggle="collapse" href="#'.$rand.'" role="button" aria-expanded="true" aria-controls="'.$rand.'">&#x21b3; '.ucwords(humanReadable('-', $sub_index)).blogTreeNavigator($base.'/'.$sub_index, $sub_value, 'class="collapse" id="'.$rand.'"', $metadata).'</a></li>';
 				}
 			}
 		}

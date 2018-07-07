@@ -35,3 +35,17 @@ body > .container {
 code {
   font-size: 80%;
 }
+
+.search-result {
+	right: 1em;
+	border-radius: 2px;
+	z-index: 99999;
+}
+
+@media (max-width: 450px) { 
+	.search-result {
+		left: 1em;
+		border-radius: 2px;
+		z-index: 99999;
+	}
+}
