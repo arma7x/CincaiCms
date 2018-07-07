@@ -2,12 +2,12 @@
 
 function startTimer() {
 	global $starttime;
-	$starttime = microtime(TRUE);
+	$starttime = microtime(true);
 }
 
 function endTimer() {
 	global $starttime;
-	$endtime = microtime(TRUE);
+	$endtime = microtime(true);
 	$totaltime = number_format(($endtime - $starttime),3);
 	return $totaltime;
 }
@@ -94,14 +94,14 @@ function blogTreeNavigator($base, $tree, $style, $metadata) {
 		} else {
 			foreach ($value as $sub_index => $sub_value) {
 				if (count($sub_value) == count($sub_value, COUNT_RECURSIVE)) {
-					$rand = microtime(true);
+					$rand = microtime(true).md5($sub_index);
 					$body .= '<li><a data-toggle="collapse" href="#'.$rand.'" role="button" aria-expanded="true" aria-controls="'.$rand.'">&#x21b3 '.ucwords(humanReadable('-', $sub_index)).'<ul class="collapse" id="'.$rand.'">';
 					foreach ($sub_value as $child_index => $child_value) {
 						$body .= '<li><a href="'.$base.'/'.$sub_index.'/'.explode('.', $child_value)[0].'">'.ucwords(humanReadable('-', explode('.', $child_value)[0])).'</a></li>';
 					}
 					$body .= '</ul></a></li>';
 				} else {
-					$rand = microtime(true);
+					$rand = microtime(true).md5($sub_index);
 					$body .= '<li><a data-toggle="collapse" href="#'.$rand.'" role="button" aria-expanded="true" aria-controls="'.$rand.'">&#x21b3; '.ucwords(humanReadable('-', $sub_index)).blogTreeNavigator($base.'/'.$sub_index, $sub_value, 'class="collapse" id="'.$rand.'"', $metadata).'</a></li>';
 				}
 			}
