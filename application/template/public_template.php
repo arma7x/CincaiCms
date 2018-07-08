@@ -58,7 +58,7 @@
 			<?php if (count($data['blog_tree']) > 0): ?>
 			<div class="col-md-4 col-lg-3" id="sidebar">
 				<h3>Blog Posts</h3>
-				<?php echo blogTreeNavigator('/blogs', $data['blog_tree'], '', $data['blogs_metadata']); ?>
+				<span style="font-size:16px;"><?php echo blogTreeNavigator('/blogs', $data['blog_tree'], '', $data['blogs_metadata']); ?></span>
 			</div>
 			<?php endif; ?>
 		</div>
