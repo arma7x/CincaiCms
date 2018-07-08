@@ -11,7 +11,7 @@
 	<!-- Bootstrap core CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/theme.css">
+	<link rel="stylesheet" href="/theme.css?<?php echo filemtime(realpath(__dir__.'/../../public/theme.css')) ?>">
 
 	</head>
 	<body>
@@ -24,7 +24,7 @@
 			</button>
 			<?php if (count($data['blog_tree']) > 0): ?>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<?php echo pageTreeNavigator($data['page_tree'], $data['page_ordering']); ?>
+				<?php echo pageTreeNavigator($data['page_tree'], $data['page_ordering'], $file->request_query, $data['pages_metadata']); ?>
 				<form id="search-form" class="form-inline my-2 my-lg-0" autocomplete="off">
 					<input id="search_keyword" class="form-control mr-sm-2" type="search" placeholder="Search blog posts" aria-label="Search">
 				</form>
@@ -67,7 +67,7 @@
 	<footer class="footer">
 		<div class="container-fluid">
 		<?php  $data['stat_ram'] = ramUsage(); $data['stat_timer'] = endTimer(); ?>
-		<span class="text-muted"><?php echo $data['stat_timer']; ?>Second/<?php echo $data['stat_ram']; ?>MB <a href="/admin">Admin Panel</a></span>
+		<span class="text-muted"><?php echo $data['stat_timer']; ?>Second/<?php echo $data['stat_ram']; ?>MB <a href="/admin" class="float-md-right"><i class="fa fa-user-secret"></i> Admin Panel</a></span>
 		</div>
 	</footer>
    

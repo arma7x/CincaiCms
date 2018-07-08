@@ -7,7 +7,7 @@ class FileLocator {
 	use Commons;
 
 	protected $base_folder = '';
-	protected $request_query = '';
+	protected $request_query = [];
 	protected $target_folder = '';
 	protected $target_file = '';
 	protected $absolute_file_path = '';

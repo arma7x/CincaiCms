@@ -20,7 +20,7 @@ function humanReadable($delimiter, $word) {
 	return implode(' ', explode($delimiter, $word));
 }
 
-function pageTreeNavigator($tree, $ordering) {
+function pageTreeNavigator($tree, $ordering , $current, $metadata) {
 	$open = '<ul class="navbar-nav mr-auto">';
 	$body = '';
 	$close = '</ul>';
@@ -34,17 +34,21 @@ function pageTreeNavigator($tree, $ordering) {
 		foreach($ordering as $index => $value) {
 			$temp = $tree[$value['index']];
 			if (is_string($temp)) {
-				$text = ucwords(humanReadable('-', explode('.', $temp)[0]));
-				$body .= '<li class="nav-item"><a class="nav-link" href="/'.explode('.', $temp)[0].'"><i class="fa '.$value['ico'].'"></i> '.$text.'</a></li>';
+				$active = (count($current) > 0 && $current[0] === explode('.', $temp)[0]) ? 'active' : '';
+				//$text = ucwords(humanReadable('-', explode('.', $temp)[0]));
+				$text = $metadata[explode('.', $temp)[0]]['title'];
+				$body .= '<li class="nav-item '.$active.'"><a class="nav-link" href="/'.explode('.', $temp)[0].'"><i class="fa '.$value['ico'].'"></i> '.$text.'</a></li>';
 			} else {
 				foreach ($temp as $sub_index => $sub_value) {
+					$active = (count($current) > 0 && $current[0] === $sub_index) ? 'active' : '';
 					$b_drop = '';
 					if (count($sub_value) == count($sub_value, COUNT_RECURSIVE)) {
-						$b_drop .= '<li class="nav-item dropdown">';
+						$b_drop .= '<li class="nav-item dropdown '.$active.'">';
 						$b_drop .= '<a class="nav-link dropdown-toggle" href="#" id="'.$sub_index.'" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa '.$value['ico'].'"></i> '.ucwords(humanReadable('-', $sub_index)).'</a>';
 						$b_drop .= '<div class="dropdown-menu" aria-labelledby="'.$sub_index.'">';
 						foreach($sub_value as $child_index => $child_value) {
-							$child_text = ucwords(humanReadable('-', explode('.', $child_value)[0]));
+							//$child_text = ucwords(humanReadable('-', explode('.', $child_value)[0]));
+							$child_text = $metadata[explode('.', $child_value)[0]]['title'];
 							$b_drop .= '<a class="dropdown-item" href="/'.$sub_index.'/'.explode('.', $child_value)[0].'">'.$child_text.'</a>';
 						}
 						$b_drop .= '</div></li>';

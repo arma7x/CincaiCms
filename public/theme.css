@@ -1,6 +1,5 @@
-
-		/* Sticky footer styles
-		-------------------------------------------------- */
+/* Sticky footer styles
+-------------------------------------------------- */
 html {
   position: relative;
   min-height: 100%;
@@ -40,9 +39,10 @@ code {
 	right: 1em;
 	border-radius: 2px;
 	z-index: 99999;
+	min-width: 20em;
 }
 
-@media (max-width: 450px) { 
+@media (max-width: 576px) { 
 	.search-result {
 		left: 1em;
 		border-radius: 2px;
