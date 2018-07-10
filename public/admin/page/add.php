@@ -20,7 +20,7 @@
 				'author' => $_POST['author'],
 				'title' => $_POST['title'], 
 				'description' => $_POST['description'], 
-				'save_path' => FileEditor::FolderFriendly($_POST['save_path']), 
+				'save_path' => FileEditor::TitleFriendly($_POST['save_path']), 
 				'created_at' => time(),
 				'updated_at' => time(),
 				'content' => $_POST['content'],
@@ -67,8 +67,7 @@
 			<?php require_once('../../../application/template/flash_message.php'); ?>
 			<h1 class="text-center mt-5">Add Page</h1>
 			<small>* Please use alphanumeric character and dash only</small><br>
-			<small>* Save path convert space between word as subfolder, etc <strong>`folder`</strong> -> <strong>folder</strong> / <strong>`folder subfolder`</strong> -> <strong>folder<?php echo DIRECTORY_SEPARATOR ?>subfolder</strong></small><br>
-			<small>* Only single folder save path is valid , etc <strong>`folder`</strong> -> <strong>OK</strong> / <strong>`folder subfolder`</strong> -> <strong>BAD</strong></small>
+			<small>* Save path convert space between word as dash, etc `foo bar`</strong> -> <strong>foo-bar</strong></small><br>
 			<hr>
 			<form id="form-login" class="add-page" action="/admin/page/add.php" method="post">
 				<div class="form-label-group mb-2">
