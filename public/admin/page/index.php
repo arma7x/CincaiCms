@@ -45,6 +45,7 @@
 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel="stylesheet" href="/theme.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
 	</head>
 
 	<body>
@@ -59,39 +60,50 @@
 			<h1 class="text-center mt-5">Page List</h1>
 			<hr>
 			<div class="table-responsive">
-				<table class="table">
-					<tr>
-					<th class="table-dark">Index</th>
-					<th class="table-dark">Title</th>
-					<th class="table-dark">Author</th>
-					<th class="table-dark">Description</th>
-					<th class="table-dark">Save Path</th>
-					<th class="table-dark">Created At</th>
-					<th class="table-dark">Updated At</th>
-					<th class="table-dark">Action</th>
-				</tr>
-				<?php foreach($pages_metadata->getMetadata() as $index => $meta): ?>
-				<tr>
-					<td><?php echo $index ?></td>
-					<td><?php echo $meta['title'] ?></td>
-					<td><?php echo $meta['author'] ?></td>
-					<td><?php echo $meta['description'] ?></td>
-					<td><?php echo FileEditor::FolderFriendlyToURL($meta['save_path']); ?></td>
-					<td><?php echo date("jS F, Y, H:i:s P", $meta['created_at']) ?></td>
-					<td><?php echo date("jS F, Y, H:i:s P", $meta['updated_at']) ?></td>
-					<td>
-						<button class="mb-1 btn btn-sm btn-info text-white" onclick="viewPage('<?php echo FileEditor::FolderFriendlyToURL($meta['save_path']).'/'.$index; ?>')">View</button><br/>
-						<button class="mb-1 btn btn-sm btn-warning text-white" onclick="editPage('<?php echo $index ?>')">Edit</button><br/>
-						<button class="btn btn-sm btn-danger" onclick="deletePage('<?php echo $index ?>')">Delete</button>
-					</td>
-				</tr>
-				<?php endforeach ?>
+				<table id="table" class="table">
+					<thead>
+						<tr>
+							<th class="table-dark">Index</th>
+							<th class="table-dark">Title</th>
+							<th class="table-dark">Author</th>
+							<th class="table-dark">Description</th>
+							<th class="table-dark">Save Path</th>
+							<th class="table-dark">Created At</th>
+							<th class="table-dark">Updated At</th>
+							<th class="table-dark">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach($pages_metadata->getMetadata() as $index => $meta): ?>
+						<tr>
+							<td><?php echo $index ?></td>
+							<td><?php echo $meta['title'] ?></td>
+							<td><?php echo $meta['author'] ?></td>
+							<td><?php echo $meta['description'] ?></td>
+							<td><?php echo FileEditor::FolderFriendlyToURL($meta['save_path']); ?></td>
+							<td><?php echo date("jS F, Y, H:i:s P", $meta['created_at']) ?></td>
+							<td><?php echo date("jS F, Y, H:i:s P", $meta['updated_at']) ?></td>
+							<td>
+								<button class="mb-1 btn btn-sm btn-info text-white" onclick="viewPage('<?php echo FileEditor::FolderFriendlyToURL($meta['save_path']).'/'.$index; ?>')">View</button><br/>
+								<button class="mb-1 btn btn-sm btn-warning text-white" onclick="editPage('<?php echo $index ?>')">Edit</button><br/>
+								<button class="btn btn-sm btn-danger" onclick="deletePage('<?php echo $index ?>')">Delete</button>
+							</td>
+						</tr>
+						<?php endforeach ?>
+					</tbody>
 				</table>
 			</div>
 		</main>
 
 		<?php require_once('../../../application/template/admin_footer.php'); ?>
+		<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
 		<script>
+			$(document).ready(function() {
+				$('#table').DataTable( {
+					"pagingType": "full_numbers"
+				});
+			});
 			function deletePage(index) {
 				var res = confirm('Are you sure to remove page `'+index+'` ?')
 				if (res) {
