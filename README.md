@@ -5,7 +5,7 @@
 3. Run 'php -S 127.0.0.1:9000 -t public' in terminal
 4. Open 127.0.0.1:9000 in browser
 
-### Tools:
+### Dependencies:
 
 * [Bootstrap 4(CSS/Theme)](https://getbootstrap.com)
 * [JQuery(Javascript)](https://jquery.com)
