@@ -41,7 +41,6 @@
 	<main role="main" class="container">
 		<div class="row">
 			<div class="<?php echo (count($data['blog_tree']) > 0) ? 'col-md-8 col-lg-9': 'col-md-12 col-lg-12' ?>">
-				<article>
 				<?php if (isset($file->request_query[0]) && $file->request_query[0] === 'blogs'): ?>
 					<?php if (count($data['metadata']) > 0): ?>
 						<h3><?php echo isset($data['metadata']['title']) ? $data['metadata']['title'] : ucwords(humanReadable('-', $data['title'])) ?></h3>
@@ -54,7 +53,8 @@
 						</small><br/>
 					<?php endif ?>
 				<?php endif ?>
-				<?php echo $data['content']; ?>
+				<article>
+					<?php echo $data['content']; ?>
 				</article>
 			</div>
 			<?php if (count($data['blog_tree']) > 0): ?>
