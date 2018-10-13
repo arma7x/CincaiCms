@@ -38,6 +38,6 @@
 	$data['pages_metadata'] = $pages_metadata->getMetadata();
 	$data['page_tree'] = FileLocator::getDirectoryTree(__dir__.'/../application/pages');
 	$data['blog_tree'] = FileLocator::getDirectoryTree(__dir__.'/../application/blogs');
-	$data['page_ordering'] = unserialize(file_get_contents(__dir__.'/../application/pages_ordering.js'));
+	$data['page_ordering'] = unserialize(file_get_contents(__dir__.'/../application/pages_ordering.json'));
 	require_once('../application/template/public_template.php');
 

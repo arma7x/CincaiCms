@@ -13,7 +13,7 @@
 		foreach($_POST['index'] as $index => $value) {
 			$new_order[] = ['index'=> (int)$value, 'ico' => $_POST['icon'][$index]];
 		}
-		file_put_contents(__dir__.'/../../../application/pages_ordering.js', serialize($new_order));
+		file_put_contents(__dir__.'/../../../application/pages_ordering.json', serialize($new_order));
 		$_SESSION['flash']['success'] = 'Successfully update page sorting';
 		header('Location: /admin/page/sort.php');
 		die;
@@ -31,7 +31,7 @@
 			}
 		}
 	}
-	$pages_ordering = file_get_contents(__dir__.'/../../../application/pages_ordering.js');
+	$pages_ordering = file_get_contents(__dir__.'/../../../application/pages_ordering.json');
 	$data['pages_ordering'] = unserialize($pages_ordering);
 	if ($data['pages_ordering'] === null)
 		$data['pages_ordering'] = [];
