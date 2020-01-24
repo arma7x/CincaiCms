@@ -16,4 +16,3 @@
 ### Info:
 *  Demo https://cincaicms.herokuapp.com
 *  Admin panel password: admin
-*  Test on PHP Version 5.6.36([Heroku](https://heroku.com))
